@@ -1,5 +1,5 @@
 from collections import Counter
-from . import *
+from . import get_dataset_path, SLASH
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -12,10 +12,9 @@ class MnistDataset(Dataset):
     """
     def __init__(self, kind: str='Classic', train: bool=False, test: bool=False, transform=None) -> None:
         if train == test:
-            raise ValueError('Error while choosing dataset type: train and test values are the same')
-        slash: str = '/' if OS_NAME == 'Darwin' else '\\'
-        self.imagePath = get_dataset_path('EMNIST') + slash + kind + slash + ('train-images' if train else 'test-images')
-        self.labelPath = get_dataset_path('EMNIST') + slash + kind + slash + ('train-labels' if train else 'test-labels')
+            raise ValueError('Error while choosing MNIST dataset type: train and test values are the same')
+        self.imagePath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-images' if train else 'test-images')
+        self.labelPath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-labels' if train else 'test-labels')
         self.images = self._load_images(self.imagePath)
         self.labels = self._load_labels(self.labelPath)
         self.transform = transform

@@ -15,6 +15,8 @@ else:
 # List of currently all available Datasets on this Machine
 AVAILABLE_DATASETS = [_sets for _sets in os.listdir(DATA_PATH) if os.path.isdir(os.path.join(DATA_PATH, _sets))]
 
+SLASH = '/' if OS_NAME == 'Darwin' else '\\'
+
 
 def get_dataset_path(dataset_name: str) -> str:
     """
@@ -33,4 +35,5 @@ __all__ = [
     "DATA_PATH",
     "AVAILABLE_DATASETS",
     "get_dataset_path",
+    "SLASH"
 ]
