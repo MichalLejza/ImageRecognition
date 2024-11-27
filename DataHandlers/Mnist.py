@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 
 class MnistDataset(Dataset):
     """
-    Ok, now I want to add something
+
     """
     def __init__(self, kind: str='Classic', train: bool=False, test: bool=False, transform=None) -> None:
         if train == test:
