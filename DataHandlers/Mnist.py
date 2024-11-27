@@ -19,6 +19,7 @@ class MnistDataset(Dataset):
         self.images = self._load_images(self.imagePath)
         self.labels = self._load_labels(self.labelPath)
         self.transform = transform
+        self.xdd = 'XDDD'
 
 
     def __len__(self) -> int:
