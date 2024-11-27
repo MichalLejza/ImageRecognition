@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 
 class MnistDataset(Dataset):
     """
-    Hej, to jest jakaś tam zmiana
+
     """
     def __init__(self, kind: str='Classic', train: bool=False, test: bool=False, transform=None) -> None:
         if train == test:
@@ -19,7 +19,6 @@ class MnistDataset(Dataset):
         self.images = self._load_images(self.imagePath)
         self.labels = self._load_labels(self.labelPath)
         self.transform = transform
-        self.xdd = 'XDDD'
 
 
     def __len__(self) -> int:
