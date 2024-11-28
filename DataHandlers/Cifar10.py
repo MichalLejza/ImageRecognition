@@ -1,9 +1,9 @@
-import os
 import pickle
 import numpy as np
 import torch
-from torch.utils.data import TensorDataset, DataLoader, Dataset
-from . import get_dataset_path, OS_NAME, SLASH
+from torch.utils.data import Dataset
+
+from . import get_dataset_path, SLASH
 
 
 class Cifar10Dataset(Dataset):
@@ -29,7 +29,7 @@ class Cifar10Dataset(Dataset):
         return self.images.shape
 
 
-    def __num__classes(self) -> int:
+    def __num__classes__(self) -> int:
         """
         :return:
         """
