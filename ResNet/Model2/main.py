@@ -1,10 +1,15 @@
-from ML_Pytorch.DataHandlers.Cifar10 import Cifar10Dataset
+from torchvision import transforms
+
+from ML_Pytorch.DataHandlers.TinyImageNet import TinyImageNetDataset
 
 
 if __name__ == '__main__':
-    dataSet = Cifar10Dataset(test=True)
-    print(dataSet.__size__())
-    dataset = Cifar10Dataset(train=True)
-    print(dataset.__size__())
-    dataset.plotImage(1)
-    dataset.plotEightImages()
+    transform = transforms.Compose([
+        transforms.Resize((64, 64)),  # Ensure images are 64x64
+        transforms.ToTensor(),  # Convert to PyTorch tensor (C, H, W)
+    ])
+    dataset = TinyImageNetDataset(train=True, transform=transform)
+    print(len(dataset))
+    print(dataset.images.shape)
+    dataset.plot_image(0)
+    dataset.plot_eight_images()
