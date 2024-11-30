@@ -1,6 +1,6 @@
 from torchvision import transforms
 
-from ML_Pytorch.DataHandlers.TinyImageNet import TinyImageNetDataset
+from DataHandlers.TinyImageNet import TinyImageNetDataset
 
 
 if __name__ == '__main__':
@@ -11,5 +11,5 @@ if __name__ == '__main__':
     dataset = TinyImageNetDataset(train=True, transform=transform)
     print(len(dataset))
     print(dataset.images.shape)
-    dataset.plot_image(2000)
+    dataset.plot_image(0)
     dataset.plot_eight_images(random=True)

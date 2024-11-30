@@ -88,11 +88,7 @@ class TinyImageNetDataset(Dataset):
         path = get_dataset_path('IMAGENET') + SLASH + 'train'
         images = []
         labels = []
-        i = 0
         for name in tqdm(os.listdir(path)):
-            print(name)
-            if i == 5:
-                break
             folderPath = path + SLASH + name + SLASH + 'images'
             for img in os.listdir(folderPath):
                 imgPath = os.path.join(folderPath, img)
@@ -102,7 +98,6 @@ class TinyImageNetDataset(Dataset):
                     labels.append(name)
                 except Exception as e:
                     print(f"Error loading {img}: {e}")
-            i += 1
         return torch.stack(images), labels
 
     @staticmethod
