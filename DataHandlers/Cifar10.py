@@ -1,10 +1,11 @@
-import os
 import pickle
+
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
-from torch.utils.data import TensorDataset, DataLoader, Dataset
-from . import get_dataset_path, OS_NAME, SLASH
+from torch.utils.data import Dataset
+
+from . import get_dataset_path, SLASH
 
 
 class Cifar10Dataset(Dataset):
@@ -102,7 +103,16 @@ class Cifar10Dataset(Dataset):
         :param random:
         :return:
         """
-        pass
+        plt.figure(figsize=(15, 10))
+        indexes = np.array([i for i in range(8)])
+        if random:
+            indexes = np.random.randint(0, len(self.labels), size=8)
+        for i in range(len(indexes)):
+            plt.subplot(2, 4, i + 1)
+            plt.imshow(self.images[indexes[i]] / 255.0)
+            plt.title(self._classes[self.labels[i]])
+        plt.tight_layout()
+        plt.show()
 
     def plotImage(self, idx: int) -> None:
         """
@@ -112,4 +122,3 @@ class Cifar10Dataset(Dataset):
         plt.imshow(self.images[idx] / 255.0)
         plt.title(self._classes[self.labels[idx]])
         plt.show()
-
