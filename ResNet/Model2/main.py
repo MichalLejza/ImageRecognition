@@ -11,5 +11,5 @@ if __name__ == '__main__':
     dataset = TinyImageNetDataset(train=True, transform=transform)
     print(len(dataset))
     print(dataset.images.shape)
-    dataset.plot_image(0)
-    dataset.plot_eight_images()
+    dataset.plot_image(2000)
+    dataset.plot_eight_images(random=True)
