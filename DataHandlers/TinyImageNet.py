@@ -5,7 +5,16 @@ from torch.utils.data import Dataset
 
 
 class TinyImageNetDataset(Dataset):
+    """
+
+    """
     def __init__(self, root_dir, split, transform=None):
+        """
+
+        :param root_dir:
+        :param split:
+        :param transform:
+        """
         self.root_dir = root_dir
         self.split = split
         self.transform = transform
