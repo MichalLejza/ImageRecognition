@@ -2,6 +2,7 @@ import os
 import pickle
 import numpy as np
 import torch
+from matplotlib import pyplot as plt
 from torch.utils.data import TensorDataset, DataLoader, Dataset
 from . import get_dataset_path, OS_NAME, SLASH
 
@@ -22,6 +23,10 @@ class Cifar10Dataset(Dataset):
         else:
             self.images, self.labels = self._load_test_data(self.path)
 
+        self._classes = [
+            'Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck'
+        ]
+
     def __size__(self) -> None:
         """
         :return:
@@ -32,7 +37,7 @@ class Cifar10Dataset(Dataset):
         """
         :return:
         """
-        pass
+        return len(self._classes)
 
     def __len__(self) -> int:
         """
@@ -99,9 +104,12 @@ class Cifar10Dataset(Dataset):
         """
         pass
 
-    def plotImage(self) -> None:
+    def plotImage(self, idx: int) -> None:
         """
 
         :return:
         """
-        pass
+        plt.imshow(self.images[idx] / 255.0)
+        plt.title(self._classes[self.labels[idx]])
+        plt.show()
+
