@@ -1,4 +1,4 @@
-from DataHandlers.Cifar10 import Cifar10Dataset
+from ML_Pytorch.DataHandlers.Cifar10 import Cifar10Dataset
 
 
 if __name__ == '__main__':
@@ -6,3 +6,5 @@ if __name__ == '__main__':
     print(dataSet.__size__())
     dataset = Cifar10Dataset(train=True)
     print(dataset.__size__())
+    dataset.plotImage(1)
+    dataset.plotEightImages()

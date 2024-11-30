@@ -10,15 +10,17 @@ class MnistDataset(Dataset):
     """
 
     """
-    def __init__(self, kind: str='Classic', train: bool=False, test: bool=False, transform=None) -> None:
+
+    def __init__(self, kind: str = 'Classic', train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing MNIST dataset type: train and test values are the same')
-        self.imagePath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-images' if train else 'test-images')
-        self.labelPath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-labels' if train else 'test-labels')
+        self.imagePath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + (
+            'train-images' if train else 'test-images')
+        self.labelPath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + (
+            'train-labels' if train else 'test-labels')
         self.images = self._load_images(self.imagePath)
         self.labels = self._load_labels(self.labelPath)
         self.transform = transform
-
 
     def __len__(self) -> int:
         """
@@ -26,13 +28,11 @@ class MnistDataset(Dataset):
         """
         return len(self.labels)
 
-
     def __size__(self) -> tuple:
         """
         :return:
         """
         return self.images.shape
-
 
     def __getitem__(self, idx: int) -> tuple:
         """
@@ -46,14 +46,12 @@ class MnistDataset(Dataset):
             image = self.transform(image)
         return image, label
 
-
     def __num_classes__(self) -> int:
         """
 
         :return:
         """
         return len(list(Counter(self.labels.numpy()).keys()))
-
 
     def plotClassDist(self) -> None:
         """
@@ -74,8 +72,7 @@ class MnistDataset(Dataset):
             plt.text(bar.get_x() + bar.get_width() / 2, yval, str(yval), ha='center', va='bottom', fontsize=10)
         plt.show()
 
-
-    def plotEightImages(self, random: bool=False, transform: bool=False) -> None:
+    def plotEightImages(self, random: bool = False, transform: bool = False) -> None:
         """
 
         :param transform:
@@ -94,8 +91,7 @@ class MnistDataset(Dataset):
         plt.tight_layout()
         plt.show()
 
-
-    def plotImage(self, index: int=0) -> None:
+    def plotImage(self, index: int = 0) -> None:
         """
 
         :param index:
@@ -106,7 +102,6 @@ class MnistDataset(Dataset):
         plt.title("Label: " + self.returnLabel(self.labels[index]))
         plt.axis('off')
         plt.show()
-
 
     @staticmethod
     def returnLabel(number) -> str:
@@ -123,7 +118,6 @@ class MnistDataset(Dataset):
         else:
             return chr(ord('a') + number - 36)
 
-
     @staticmethod
     def _load_images(filepath: str):
         """
@@ -136,7 +130,6 @@ class MnistDataset(Dataset):
             images = np.frombuffer(f.read(), dtype=np.uint8)
             images = images.reshape(-1, 28, 28).astype(np.float32)
         return torch.tensor(images).unsqueeze(1)
-
 
     @staticmethod
     def _load_labels(filepath: str):

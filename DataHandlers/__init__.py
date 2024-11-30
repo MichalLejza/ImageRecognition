@@ -8,7 +8,7 @@ OS_NAME = platform.system()
 if OS_NAME == "Windows":  # Windows
     DATA_PATH = os.path.expanduser("~\\Desktop\\Data")
 elif OS_NAME == "Darwin":  # macos
-    DATA_PATH = os.path.expanduser("")
+    DATA_PATH = os.path.expanduser("~/Desktop/Data")
 else:
     raise ValueError("Your Operating Systems is not supported!\nTry Windows/MacOS")
 
