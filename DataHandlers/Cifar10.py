@@ -10,7 +10,8 @@ class Cifar10Dataset(Dataset):
     """
     Description of Cifar 10 DataBase to be made.
     """
-    def __init__(self, train: bool=False, test: bool=False, transform=None) -> None:
+
+    def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing CIFAR10 dataset type: train and test values are the same')
 
@@ -21,20 +22,17 @@ class Cifar10Dataset(Dataset):
         else:
             self.images, self.labels = self._load_test_data(self.path)
 
-
-    def  __size__(self) -> None:
+    def __size__(self) -> None:
         """
         :return:
         """
         return self.images.shape
-
 
     def __num__classes(self) -> int:
         """
         :return:
         """
         pass
-
 
     def __len__(self) -> int:
         """
@@ -69,7 +67,6 @@ class Cifar10Dataset(Dataset):
         images = np.vstack(images).reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
 
-
     @staticmethod
     def _load_test_data(dir_path: str) -> tuple:
         """
@@ -81,7 +78,6 @@ class Cifar10Dataset(Dataset):
         images = batch_data['data'].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
         labels = batch_data['labels']
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
-
 
     @staticmethod
     def _load_pickle_file(filepath: str) -> dict:
@@ -95,16 +91,13 @@ class Cifar10Dataset(Dataset):
         data = {key.decode('utf=8'): value for key, value in data.items()}
         return data
 
-
-
-    def plotEightImages(self, random: bool=False) -> None:
+    def plotEightImages(self, random: bool = False) -> None:
         """
 
         :param random:
         :return:
         """
         pass
-
 
     def plotImage(self) -> None:
         """
