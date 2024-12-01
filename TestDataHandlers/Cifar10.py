@@ -10,4 +10,3 @@ if __name__ == '__main__':
     dataset = Cifar10Dataset(train=True, transform=transform)
     print(len(dataset))
     print(dataset.images.shape)
-    dataset.plotEightImages(random=True)
