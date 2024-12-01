@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, TensorDataset, DataLoader
 from . import get_dataset_path, SLASH
 
 
@@ -30,6 +30,11 @@ class Cifar10Dataset(Dataset):
         :return: Number of classes
         """
         return len(self.__classes)
+
+    def get_data_loader(self, batch_size: int = 64, shuffle: bool = False):
+        dataset = TensorDataset(self.__images, self.__labels)
+        loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        return loader
 
     def __str__(self) -> str:
         info = 'Cifar-10 Dataset\n'

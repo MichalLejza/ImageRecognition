@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, TensorDataset, DataLoader
 from collections import Counter
 from tqdm import tqdm
 from . import get_dataset_path, SLASH
@@ -11,6 +11,7 @@ class MnistDataset(Dataset):
     def __init__(self, kind: str = 'Classic', train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing MNIST dataset type: train and test values are the same')
+
         self.__kind = kind
         self.__transform = transform
         path = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-' if train else 'test-')
@@ -29,6 +30,11 @@ class MnistDataset(Dataset):
         :return: Number of classes
         """
         return self.__classes
+
+    def get_data_loader(self, batch_size: int = 64, shuffle: bool = False):
+        dataset = TensorDataset(self.__images, self.__labels)
+        loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        return loader
 
     def __str__(self) -> str:
         """

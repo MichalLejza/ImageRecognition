@@ -3,47 +3,74 @@ import numpy as np
 import torch
 from PIL import Image
 from matplotlib import pyplot as plt
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, TensorDataset, DataLoader
 from tqdm import tqdm
 from . import *
 
 
 class TinyImageNetDataset(Dataset):
-    def __init__(self, train: bool = False, test: bool = False,
-                 val: bool = False, normalise: str = 'He', transform=None):
+    def __init__(self, train: bool = False, test: bool = False, val: bool = False, transform=None):
         if (train + test + val) != 1:
-            raise ValueError('Error, specify which dataset to use')
-        self.transform = transform
-        self.folderMeaning: dict = self._get_folder_meaning()
-        self.namesMapped: dict = self._map_names(self.folderMeaning)
+            raise ValueError('Error, when choosing Tiny Image Net type: choose train or test or val')
+
+        self.__transform = transform
+        self.__folderMeaning: dict = self.__get_folder_meaning()
+        self.__namesMapped: dict = self.__map_names(self.__folderMeaning)
 
         if train:
-            self.images, self.labels = self._load_train_data(transform=transform)
+            self.__images, self.__labels = self.__load_train(transform=transform)
         if test:
-            self.images, self.labels = self._load_test_data(transform=transform)
+            self.__images, self.__labels = self.__load_test(transform=transform)
         if val:
-            self.images, self.labels = self._load_val_data(transform=transform)
+            self.__images, self.__labels = self.__load_val(transform=transform)
 
-    def __size__(self) -> int:
+    def images_shape(self) -> tuple:
         """
-        Description of __size__
+        :return: Shape of images tensor
         """
-        return self.images.shape
+        return self.__images.shape
+
+    def num_classes(self) -> int:
+        """
+        :return: Number of classes
+        """
+        return self.__namesMapped.__len__()
+
+    def get_data_loader(self, batch_size: int = 64, shuffle: bool = False):
+        dataset = TensorDataset(self.__images, self.__labels)
+        loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        return loader
+
+    def __str__(self) -> str:
+        """
+        Description of __str__ to be made
+        :return:
+        """
+        info = f'Tiny Image Net Dataset\n'
+        info += f'Tensor images type: {type(self.__images)}\n'
+        info += f'Number of images: {self.__images.shape[0]}\n'
+        info += f'Number of channels {self.__images.shape[1]}\n'
+        info += f'Shape of images: {self.__images.shape[2]} x {self.__images.shape[3]}\n'
+        return info
 
     def __len__(self) -> int:
         """
         description of __len__
         """
-        return self.images.shape[0]
+        return self.__images.shape[0]
 
-    def __getitem__(self, index: int) -> dict:
+    def __getitem__(self, idx: int) -> tuple:
         """
         Description of __getitem__
         """
-        pass
+        image = self.__images[idx]
+        label = self.__labels[idx]
+        if self.__transform is not None:
+            image = self.__transform(image)
+        return image, label
 
     @staticmethod
-    def _map_names(names: dict) -> dict:
+    def __map_names(names: dict) -> dict:
         """
         Description of _map_names
         """
@@ -55,7 +82,7 @@ class TinyImageNetDataset(Dataset):
         return mapped
 
     @staticmethod
-    def _get_folder_meaning() -> dict:
+    def __get_folder_meaning() -> dict:
         """
         Description of _get_folder_meaning
         """
@@ -75,34 +102,35 @@ class TinyImageNetDataset(Dataset):
         return folder_meaning
 
     @staticmethod
-    def _load_train_data(transform) -> tuple:
+    def __load_train(transform) -> tuple:
         """
         Description of _load_train_data
         """
         path = get_dataset_path('IMAGENET') + SLASH + 'train'
         images = []
         labels = []
-        for name in tqdm(os.listdir(path)):
+        for name in tqdm(os.listdir(path), desc='Loading Train Data'):
             folderPath = path + SLASH + name + SLASH + 'images'
-            for img in os.listdir(folderPath):
-                imgPath = os.path.join(folderPath, img)
-                try:
-                    image = Image.open(imgPath).convert('RGB')
-                    images.append(transform(image))
-                    labels.append(name)
-                except Exception as e:
-                    print(f"Error loading {img}: {e}")
+            if os.path.isdir(folderPath):
+                for img in os.listdir(folderPath):
+                    imgPath = os.path.join(folderPath, img)
+                    try:
+                        image = Image.open(imgPath).convert('RGB')
+                        images.append(transform(image))
+                        labels.append(name)
+                    except Exception as e:
+                        print(f"Error loading {img}: {e}")
         return torch.stack(images), labels
 
     @staticmethod
-    def _load_test_data(transform) -> tuple:
+    def __load_test(transform) -> tuple:
         """
         Description of _load_test_data
         """
-        folderPath = get_dataset_path('IMAGENET') + SLASH + 'test' + SLASH + 'images' + SLASH
+        path = get_dataset_path('IMAGENET') + SLASH + 'test' + SLASH + 'images' + SLASH
         images = []
-        for img in tqdm(os.listdir(folderPath)):
-            imgPath = os.path.join(folderPath, img)
+        for img in tqdm(os.listdir(path), desc='Loading Test Data'):
+            imgPath = os.path.join(path, img)
             try:
                 image = Image.open(imgPath).convert('RGB')
                 images.append(transform(image))
@@ -111,16 +139,16 @@ class TinyImageNetDataset(Dataset):
         return torch.stack(images), None
 
     @staticmethod
-    def _load_val_data(transform) -> tuple:
+    def __load_val(transform) -> tuple:
         """
         Description of _load_val_data
+        :return:
         """
-        print("Loading validation images...")
         path = get_dataset_path('IMAGENET') + SLASH + 'val' + SLASH
         images = []
         labels = []
         with open(path + 'val_annotations.txt', 'r') as f:
-            for line in tqdm(f):
+            for line in tqdm(f, desc='Loading Validation Data'):
                 imgPath = path + SLASH + 'images' + SLASH + line.split("\t")[0]
                 try:
                     image = Image.open(imgPath).convert('RGB')
@@ -137,13 +165,13 @@ class TinyImageNetDataset(Dataset):
         plt.figure(figsize=(15, 10))
         indexes = np.array([i for i in range(8)])
         if random:
-            indexes = np.random.randint(0, self.images.shape[0], size=8)
+            indexes = np.random.randint(0, self.__images.shape[0], size=8)
         for i in range(len(indexes)):
             plt.subplot(2, 4, i + 1)
-            image = self.images[indexes[i]].permute(1, 2, 0).numpy()
+            image = self.__images[indexes[i]].permute(1, 2, 0).numpy()
             plt.imshow(image)
-            if self.labels is not None:
-                plt.title(f"Label: {self.folderMeaning[self.labels[indexes[i]]]}")
+            if self.__labels is not None:
+                plt.title(f"Label: {self.__folderMeaning[self.__labels[indexes[i]]]}")
         plt.tight_layout()
         plt.show()
 
@@ -151,9 +179,9 @@ class TinyImageNetDataset(Dataset):
         """
         Description of plot_image
         """
-        image = self.images[idx]
+        image = self.__images[idx]
         image = image.permute(1, 2, 0).numpy()
         plt.imshow(image)
-        if self.labels is not None:
-            plt.title(self.folderMeaning[self.labels[idx]])
+        if self.__labels is not None:
+            plt.title(self.__folderMeaning[self.__labels[idx]])
         plt.show()
