@@ -103,7 +103,7 @@ class Cifar10Dataset(Dataset):
             indexes = np.random.randint(0, len(self.labels), size=8)
         for i in range(len(indexes)):
             plt.subplot(2, 4, i + 1)
-            plt.imshow(self.images[indexes[i]] / 255.0)
+            plt.imshow(self.images[indexes[i]].permute(1, 2, 0).numpy() / 255.0)
             plt.title(self._classes[self.labels[indexes[i]]])
         plt.tight_layout()
         plt.show()
