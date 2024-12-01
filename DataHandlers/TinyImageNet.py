@@ -84,7 +84,6 @@ class TinyImageNetDataset(Dataset):
         """
         Description of _load_train_data
         """
-        print("Loading training images...")
         path = get_dataset_path('IMAGENET') + SLASH + 'train'
         images = []
         labels = []
@@ -105,7 +104,6 @@ class TinyImageNetDataset(Dataset):
         """
         Description of _load_test_data
         """
-        print("Loading test images...")
         folderPath = get_dataset_path('IMAGENET') + SLASH + 'test' + SLASH + 'images' + SLASH
         images = []
         for img in tqdm(os.listdir(folderPath)):

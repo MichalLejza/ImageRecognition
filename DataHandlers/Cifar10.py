@@ -1,10 +1,8 @@
 import pickle
-
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
 from torch.utils.data import Dataset
-
 from . import get_dataset_path, SLASH
 
 
@@ -16,17 +14,13 @@ class Cifar10Dataset(Dataset):
     def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing CIFAR10 dataset type: train and test values are the same')
-
         self.path = get_dataset_path('CIFAR10') + SLASH
+        self._classes = ['Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
         self.transform = transform
         if train:
             self.images, self.labels = self._load_train_data(self.path)
         else:
             self.images, self.labels = self._load_test_data(self.path)
-
-        self._classes = [
-            'Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck'
-        ]
 
     def __size__(self) -> None:
         """
@@ -34,7 +28,7 @@ class Cifar10Dataset(Dataset):
         """
         return self.images.shape
 
-    def __num__classes(self) -> int:
+    def __num__classes__(self) -> int:
         """
         :return:
         """
@@ -70,7 +64,7 @@ class Cifar10Dataset(Dataset):
             batch_data = Cifar10Dataset._load_pickle_file(file_path)
             images.append(batch_data['data'])
             labels.extend(batch_data['labels'])
-        images = np.vstack(images).reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
+        images = np.vstack(images).reshape(-1, 3, 32, 32)
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
 
     @staticmethod
@@ -81,7 +75,7 @@ class Cifar10Dataset(Dataset):
         """
         filepath = dir_path + 'test_batch'
         batch_data = Cifar10Dataset._load_pickle_file(filepath)
-        images = batch_data['data'].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
+        images = batch_data['data'].reshape(-1, 3, 32, 32)
         labels = batch_data['labels']
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
 
@@ -110,7 +104,7 @@ class Cifar10Dataset(Dataset):
         for i in range(len(indexes)):
             plt.subplot(2, 4, i + 1)
             plt.imshow(self.images[indexes[i]] / 255.0)
-            plt.title(self._classes[self.labels[i]])
+            plt.title(self._classes[self.labels[indexes[i]]])
         plt.tight_layout()
         plt.show()
 
