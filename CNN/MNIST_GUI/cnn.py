@@ -63,7 +63,7 @@ class CNN(nn.Module):
                 loss.backward()
                 self.optimizer.step()
                 running_loss += loss.item()
-            print(f'Epoch [{epoch + 1}/{self.epochs}], Loss: {running_loss / len(train_loader):.4f}')
+            print(f'  Loss: {running_loss / len(train_loader):.4f}')
             self.test_model()
         print('Training completed.')
         end = time.time()
