@@ -1,19 +1,14 @@
 import os
-
 import numpy as np
 import torch
 from PIL import Image
 from matplotlib import pyplot as plt
 from torch.utils.data import Dataset
 from tqdm import tqdm
-
 from . import *
 
 
 class TinyImageNetDataset(Dataset):
-    """
-    Description of TinyImageNetDataset to be made hehe
-    """
     def __init__(self, train: bool = False, test: bool = False,
                  val: bool = False, normalise: str = 'He', transform=None):
         if (train + test + val) != 1:

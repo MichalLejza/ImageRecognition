@@ -1,9 +1,10 @@
-from collections import Counter
-from . import get_dataset_path, SLASH
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+from collections import Counter
+from tqdm import tqdm
+from . import get_dataset_path, SLASH
 
 
 class MnistDataset(Dataset):
@@ -30,6 +31,10 @@ class MnistDataset(Dataset):
         return self.__classes
 
     def __str__(self) -> str:
+        """
+        Description of __str__ to be made
+        :return:
+        """
         info = f'Mnist Dataset type: {self.__kind}\n'
         info += f'Tensor images type: {type(self.__images)}\n'
         info += f'Number of images: {self.__images.shape[0]}\n'
@@ -39,13 +44,13 @@ class MnistDataset(Dataset):
 
     def __len__(self) -> int:
         """
-        :return:
+        :return: to be made
         """
         return self.__images.shape[0]
 
     def __getitem__(self, idx: int) -> tuple:
         """
-
+        Description pf __getitem__ to be made
         :param idx:
         :return:
         """
@@ -75,7 +80,7 @@ class MnistDataset(Dataset):
 
     def plot_eight_images(self, random: bool = False) -> None:
         """
-
+        Description of plot_eight_images to be made
         :param random:
         :return:
         """
@@ -93,7 +98,7 @@ class MnistDataset(Dataset):
 
     def plot_image(self, index: int = 0) -> None:
         """
-
+        Description of plot_image to be made
         :param index:
         :return:
         """
@@ -106,7 +111,7 @@ class MnistDataset(Dataset):
     @staticmethod
     def __return_label(number) -> str:
         """
-
+        Description of return_label to be made
         :param number:
         :return:
         """
@@ -121,24 +126,39 @@ class MnistDataset(Dataset):
     @staticmethod
     def __load_images(filepath: str):
         """
-
+        Description of __load_images to be made
         :param filepath:
         :return:
         """
         with open(filepath, 'rb') as f:
             f.read(16)
-            images = np.frombuffer(f.read(), dtype=np.uint8)
-            images = images.reshape(-1, 28, 28).astype(np.float32)
+            f.seek(0, 2)
+            file_size = f.tell()
+            num_images = (file_size - 16) // (28 * 28)
+            f.seek(16)
+            images = []
+            for _ in tqdm(range(num_images), desc="Loading MNIST images"):
+                buffer = f.read(28 * 28)
+                image = np.frombuffer(buffer, dtype=np.uint8).reshape(28, 28).astype(np.float32)
+                images.append(image)
+        images = np.stack(images)
         return torch.tensor(images).unsqueeze(1)
 
     @staticmethod
     def __load_labels(filepath: str):
         """
-
+        Description on __load_labels to be made
         :param filepath:
         :return:
         """
         with open(filepath, 'rb') as f:
             f.read(8)
-            labels = np.frombuffer(f.read(), dtype=np.uint8)
+            f.seek(0, 2)
+            file_size = f.tell()
+            num_labels = file_size - 8
+            f.seek(8)
+            labels = []
+            for _ in tqdm(range(num_labels), desc=f"Loading MNIST labels"):
+                label = np.frombuffer(f.read(1), dtype=np.uint8)[0]
+                labels.append(label)
         return torch.tensor(labels, dtype=torch.long)
