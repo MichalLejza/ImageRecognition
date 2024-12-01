@@ -7,10 +7,6 @@ from . import get_dataset_path, SLASH
 
 
 class Cifar10Dataset(Dataset):
-    """
-    Description of Cifar 10 DataBase to be made.
-    """
-
     def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing CIFAR10 dataset type: train and test values are the same')
@@ -22,9 +18,9 @@ class Cifar10Dataset(Dataset):
         else:
             self.images, self.labels = self._load_test_data(self.path)
 
-    def __size__(self) -> None:
+    def _shape_(self) -> None:
         """
-        :return:
+        :return: Shape of 
         """
         return self.images.shape
 
