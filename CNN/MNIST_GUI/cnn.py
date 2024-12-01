@@ -50,8 +50,8 @@ class CNN(nn.Module):
 
     def train_model(self) -> None:
         start = time.time()
-        encoded = torch.nn.functional.one_hot(self.train_set.labels, num_classes=self.num_classes)
-        train_dataset = TensorDataset(self.train_set.images, encoded.float())
+        encoded = torch.nn.functional.one_hot(self.train_set.__labels, num_classes=self.num_classes)
+        train_dataset = TensorDataset(self.train_set.__images, encoded.float())
         train_loader = DataLoader(train_dataset, batch_size=self.batch_size)
         for epoch in range(self.epochs):
             self.train()
@@ -73,7 +73,7 @@ class CNN(nn.Module):
 
 
     def test_model(self) -> None:
-        test_dataset = TensorDataset(self.test_set.images, self.test_set.labels)
+        test_dataset = TensorDataset(self.test_set.__images, self.test_set.__labels)
         test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=True)
         self.eval()
         correct = 0

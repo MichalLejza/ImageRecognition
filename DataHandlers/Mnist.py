@@ -7,32 +7,41 @@ from torch.utils.data import Dataset
 
 
 class MnistDataset(Dataset):
-    """
-
-    """
-
     def __init__(self, kind: str = 'Classic', train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing MNIST dataset type: train and test values are the same')
-        self.imagePath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + (
-            'train-images' if train else 'test-images')
-        self.labelPath = get_dataset_path('EMNIST') + SLASH + kind + SLASH + (
-            'train-labels' if train else 'test-labels')
-        self.images = self._load_images(self.imagePath)
-        self.labels = self._load_labels(self.labelPath)
-        self.transform = transform
+        self.__kind = kind
+        self.__transform = transform
+        path = get_dataset_path('EMNIST') + SLASH + kind + SLASH + ('train-' if train else 'test-')
+        self.__images = self.__load_images(path + 'images')
+        self.__labels = self.__load_labels(path + 'labels')
+        self.__classes = len(list(Counter(self.__labels.numpy()).keys()))
+
+    def images_shape(self) -> tuple:
+        """
+        :return: Shape of images tensor
+        """
+        return self.__images.shape
+
+    def num_classes(self) -> int:
+        """
+        :return: Number of classes
+        """
+        return self.__classes
+
+    def __str__(self) -> str:
+        info = f'Mnist Dataset type: {self.__kind}\n'
+        info += f'Tensor images type: {type(self.__images)}\n'
+        info += f'Number of images: {self.__images.shape[0]}\n'
+        info += f'Number of channels {self.__images.shape[1]}\n'
+        info += f'Shape of images: {self.__images.shape[2]} x {self.__images.shape[3]}\n'
+        return info
 
     def __len__(self) -> int:
         """
         :return:
         """
-        return len(self.labels)
-
-    def __size__(self) -> tuple:
-        """
-        :return:
-        """
-        return self.images.shape
+        return self.__images.shape[0]
 
     def __getitem__(self, idx: int) -> tuple:
         """
@@ -40,71 +49,62 @@ class MnistDataset(Dataset):
         :param idx:
         :return:
         """
-        image = self.images[idx]
-        label = self.labels[idx]
-        if self.transform is not None:
-            image = self.transform(image)
+        image = self.__images[idx]
+        label = self.__labels[idx]
+        if self.__transform is not None:
+            image = self.__transform(image)
         return image, label
 
-    def __num_classes__(self) -> int:
+    def plot_class_dist(self) -> None:
         """
-
-        :return:
+        Description of plot_class_dist to be made
         """
-        return len(list(Counter(self.labels.numpy()).keys()))
-
-    def plotClassDist(self) -> None:
-        """
-
-        :return: None
-        """
-        labelList = list(Counter(self.labels.numpy()).keys())
-        labelCount = list(Counter(self.labels.numpy()).values())
+        labelList = list(Counter(self.__labels.numpy()).keys())
+        labelCount = list(Counter(self.__labels.numpy()).values())
         plt.figure(figsize=(10, 6))
         bars = plt.bar(labelList, labelCount, color='skyblue')
-        plt.xticks(range(10))  # Set x-ticks to label values
+        plt.xticks(range(10))
         plt.xlabel('Labels')
         plt.ylabel('Count')
         plt.title('Distribution of Labels')
         plt.grid(axis='y')
         for bar in bars:
-            yval = bar.get_height()  # Get the height of the bar
+            yval = bar.get_height()
             plt.text(bar.get_x() + bar.get_width() / 2, yval, str(yval), ha='center', va='bottom', fontsize=10)
         plt.show()
 
-    def plotEightImages(self, random: bool = False, transform: bool = False) -> None:
+    def plot_eight_images(self, random: bool = False) -> None:
         """
 
-        :param transform:
         :param random:
         :return:
         """
         plt.figure(figsize=(15, 10))
         indexes = np.array([i for i in range(8)])
         if random:
-            indexes = np.random.randint(0, len(self.labels), size=8)
+            indexes = np.random.randint(0, len(self.__labels), size=8)
         for i in range(len(indexes)):
             plt.subplot(2, 4, i + 1)
-            plt.imshow(self.images[indexes[i]][0].t(), interpolation="nearest", cmap="Greys")
-            plt.title("Label: " + self.returnLabel(self.labels[indexes[i]]))
+            plt.imshow(self.__images[indexes[i]][0].t(), interpolation="nearest", cmap="Greys")
+            plt.title("Label: " + self.__return_label(self.__labels[indexes[i]]))
             plt.axis('off')
         plt.tight_layout()
         plt.show()
 
-    def plotImage(self, index: int = 0) -> None:
+    def plot_image(self, index: int = 0) -> None:
         """
 
         :param index:
         :return:
         """
         plt.figure(figsize=(10, 10))
-        plt.imshow(self.images[index][0].t(), interpolation="nearest", cmap="Greys")
-        plt.title("Label: " + self.returnLabel(self.labels[index]))
+        plt.imshow(self.__images[index][0].t(), interpolation="nearest", cmap="Greys")
+        plt.title("Label: " + self.__return_label(self.__labels[index]))
         plt.axis('off')
         plt.show()
 
     @staticmethod
-    def returnLabel(number) -> str:
+    def __return_label(number) -> str:
         """
 
         :param number:
@@ -119,7 +119,7 @@ class MnistDataset(Dataset):
             return chr(ord('a') + number - 36)
 
     @staticmethod
-    def _load_images(filepath: str):
+    def __load_images(filepath: str):
         """
 
         :param filepath:
@@ -132,7 +132,7 @@ class MnistDataset(Dataset):
         return torch.tensor(images).unsqueeze(1)
 
     @staticmethod
-    def _load_labels(filepath: str):
+    def __load_labels(filepath: str):
         """
 
         :param filepath:

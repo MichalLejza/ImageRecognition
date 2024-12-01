@@ -8,5 +8,4 @@ if __name__ == '__main__':
         transforms.ToTensor()
     ])
     dataset = Cifar10Dataset(train=True, transform=transform)
-    print(len(dataset))
-    print(dataset.images.shape)
+    print(dataset)

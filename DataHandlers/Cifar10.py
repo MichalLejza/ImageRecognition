@@ -10,105 +10,114 @@ class Cifar10Dataset(Dataset):
     def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:
             raise ValueError('Error while choosing CIFAR10 dataset type: train and test values are the same')
-        self.path = get_dataset_path('CIFAR10') + SLASH
-        self._classes = ['Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
-        self.transform = transform
+
+        self.__path = get_dataset_path('CIFAR10') + SLASH
+        self.__classes = ['Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
+        self.__transform = transform
         if train:
-            self.images, self.labels = self._load_train_data(self.path)
+            self.__images, self.__labels = self.__load_train_data(self.__path)
         else:
-            self.images, self.labels = self._load_test_data(self.path)
+            self.__images, self.__labels = self.__load_test_data(self.__path)
 
-    def _shape_(self) -> None:
+    def images_shape(self) -> tuple:
         """
-        :return: Shape of 
+        :return: Shape of images tensor
         """
-        return self.images.shape
+        return self.__images.shape
 
-    def __num__classes__(self) -> int:
+    def num_classes(self) -> int:
         """
-        :return:
+        :return: Number of classes
         """
-        return len(self._classes)
+        return len(self.__classes)
+
+    def __str__(self) -> str:
+        info = 'Cifar-10 Dataset\n'
+        info += f'Tensor images type: {type(self.__images)}\n'
+        info += f'Number of images: {self.__images.shape[0]}\n'
+        info += f'Number of channels {self.__images.shape[1]}\n'
+        info += f'Shape of images: {self.__images.shape[2]} x {self.__images.shape[3]}\n'
+        return info
 
     def __len__(self) -> int:
         """
-        :return:
+        :return: Number of samples
         """
-        return len(self.labels)
+        return self.__images.shape[0]
 
     def __getitem__(self, idx: int) -> tuple:
         """
-
-        :param idx:
-        :return:
+        :param idx: index of the array of images
+        :return: images and labels at given index
         """
-        image = self.images[idx]
-        label = self.labels[idx]
-        if self.transform is not None:
-            image = self.transform(image)
+        image = self.__images[idx]
+        label = self.__labels[idx]
+        if self.__transform is not None:
+            image = self.__transform(image)
         return image, label
 
     @staticmethod
-    def _load_train_data(dir_path: str) -> tuple:
+    def __load_train_data(dir_path: str) -> tuple:
         """
-
+        Description of load_train_data() to be made
         :return:
         """
         images, labels = [], []
         for i in range(1, 6):
             file_path = dir_path + f"data_batch_{i}"
-            batch_data = Cifar10Dataset._load_pickle_file(file_path)
+            batch_data = Cifar10Dataset.__load_pickle_file(file_path)
             images.append(batch_data['data'])
             labels.extend(batch_data['labels'])
         images = np.vstack(images).reshape(-1, 3, 32, 32)
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
 
     @staticmethod
-    def _load_test_data(dir_path: str) -> tuple:
+    def __load_test_data(dir_path: str) -> tuple:
         """
-
-        :return:
+        Description of load_test_data() to be made
+        :return: test images and labels
         """
         filepath = dir_path + 'test_batch'
-        batch_data = Cifar10Dataset._load_pickle_file(filepath)
+        batch_data = Cifar10Dataset.__load_pickle_file(filepath)
         images = batch_data['data'].reshape(-1, 3, 32, 32)
         labels = batch_data['labels']
         return torch.tensor(images, dtype=torch.float32), torch.tensor(labels, dtype=torch.long)
 
     @staticmethod
-    def _load_pickle_file(filepath: str) -> dict:
+    def __load_pickle_file(filepath: str) -> dict:
         """
-
-        :param filepath:
-        :return:
+        Description of load_pickle_file() to be made
+        :param filepath: path of the pickle file with batch.
+        :return: Dictionary with images and labels
         """
         with open(filepath, 'rb') as f:
             data = pickle.load(f, encoding='bytes')
         data = {key.decode('utf=8'): value for key, value in data.items()}
         return data
 
-    def plotEightImages(self, random: bool = False) -> None:
+    def plot_eight_images(self, random: bool = False) -> None:
         """
-
-        :param random:
-        :return:
+        Description of plot_eight_images() to be made
+        :param random: If true, randomly choose 8 images to plot, if not, plot first 8 images
+        :return: None
         """
         plt.figure(figsize=(15, 10))
         indexes = np.array([i for i in range(8)])
         if random:
-            indexes = np.random.randint(0, len(self.labels), size=8)
+            indexes = np.random.randint(0, len(self.__labels), size=8)
         for i in range(len(indexes)):
             plt.subplot(2, 4, i + 1)
-            plt.imshow(self.images[indexes[i]].permute(1, 2, 0).numpy() / 255.0)
-            plt.title(self._classes[self.labels[indexes[i]]])
+            plt.imshow(self.__images[indexes[i]].permute(1, 2, 0).numpy() / 255.0)
+            plt.title(self.__classes[self.__labels[indexes[i]]])
         plt.tight_layout()
         plt.show()
 
-    def plotImage(self, idx: int) -> None:
+    def plot_image(self, idx: int = 0) -> None:
         """
-
-        :return:
+        Description of plot_image() to be made
+        :param idx: index of the image to be plotted
+        :return: None
         """
-        plt.imshow(self.images[idx] / 255.0)
-        plt.title(self._classes[self.labels[idx]])
+        plt.imshow(self.__images[idx] / 255.0)
+        plt.title(self.__classes[self.__labels[idx]])
         plt.show()
