@@ -1,54 +1,22 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torchvision import transforms
 from tqdm import tqdm
 from DataHandlers.Cifar10 import Cifar10Dataset
+from Models.Model1 import AlexNet
 
-
-class AlexNet(nn.Module):
-    def __init__(self, num_classes=10):
-        super(AlexNet, self).__init__()
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),  # Dostosowane do 32x32
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 32x32 -> 16x16
-            nn.Conv2d(64, 192, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 16x16 -> 8x8
-            nn.Conv2d(192, 384, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(384, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),  # 8x8 -> 4x4
-        )
-        self.classifier = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(256 * 4 * 4, 4096),  # Zmniejszono liczbę neuronów
-            nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(4096, 2048),  # Kolejna redukcja
-            nn.ReLU(inplace=True),
-            nn.Linear(2048, num_classes),  # Liczba klas dla CIFAR-10
-        )
-
-    def forward(self, x):
-        x = self.features(x)
-        x = torch.flatten(x, 1)
-        x = self.classifier(x)
-        return x
 
 
 class AlexNetTrainer:
     def __init__(self, batch_size: int  = 64, transform = None):
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.batch_size = batch_size
-        self.model = AlexNet().to(self.device)
-        self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)
         self.train_data = Cifar10Dataset(train=True, transform=transform)
         self.test_data = Cifar10Dataset(test=True, transform=transform)
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.batch_size = batch_size
+        self.model = AlexNet(self.train_data.images_shape(), self.train_data.num_classes()).to(self.device)
+        self.criterion = nn.CrossEntropyLoss()
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)
 
     def train(self, epochs: int = 10):
         self.model.train()
@@ -64,7 +32,6 @@ class AlexNetTrainer:
                 self.optimizer.step()
                 running_loss += loss.item()
             print(f'  Loss: {running_loss / len(train_loader):.4f}')
-            self.test()
         print('Training completed.')
 
     def test(self):
@@ -82,3 +49,14 @@ class AlexNetTrainer:
 
         accuracy = 100 * correct / total
         print(f"Accuracy: {accuracy:.2f}%")
+
+
+
+if __name__ == '__main__':
+    transform = transforms.Compose([
+        transforms.Resize((32, 32)),
+        transforms.ToTensor()
+    ])
+    net = AlexNetTrainer(batch_size=64, transform=transform)
+    net.train(10)
+    net.test()

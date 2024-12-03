@@ -6,9 +6,9 @@ OS_NAME = platform.system()
 
 # Creating Datapath to Datasets according to OS
 if OS_NAME == "Windows":  # Windows
-    DATA_PATH = os.path.expanduser("~\\Desktop\\Data")
+    DATA_PATH = os.path.expanduser("~\\Desktop\\Data\\ImageClassification")
 elif OS_NAME == "Darwin":  # macos
-    DATA_PATH = os.path.expanduser("~/Desktop/Data")
+    DATA_PATH = os.path.expanduser("~/Desktop/Data/ImageClassification")
 else:
     raise ValueError("Your Operating Systems is not supported!\nTry Windows/MacOS")
 
