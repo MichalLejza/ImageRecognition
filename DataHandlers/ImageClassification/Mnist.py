@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import Dataset, TensorDataset, DataLoader
 from collections import Counter
 from tqdm import tqdm
-from . import get_dataset_path, SLASH
+from DataHandlers import get_dataset_path, SLASH
 
 
 class MnistDataset(Dataset):

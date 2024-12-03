@@ -1,4 +1,4 @@
-from DataHandlers.Mnist import MnistDataset
+from DataHandlers import MnistDataset
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import time
 import torch
 import torch.nn as nn
 from tqdm import tqdm
-from DataHandlers.Mnist import MnistDataset
+from DataHandlers.ImageClassification.Mnist import MnistDataset
 from Models.Model1 import LeNet
 
 

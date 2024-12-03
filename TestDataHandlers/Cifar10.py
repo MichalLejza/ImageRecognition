@@ -1,5 +1,5 @@
 from torchvision import transforms
-from DataHandlers.Cifar10 import Cifar10Dataset
+from DataHandlers import Cifar10Dataset
 
 
 if __name__ == '__main__':
