@@ -86,8 +86,8 @@ class TinyImageNetDataset(Dataset):
         """
         Description of _get_folder_meaning
         """
-        foldersPath = get_dataset_path('IMAGENET') + SLASH + 'train'
-        filePath = get_dataset_path('IMAGENET') + SLASH + 'words.txt'
+        foldersPath = get_dataset_path('TINYIMAGENET') + SLASH + 'train'
+        filePath = get_dataset_path('TINYIMAGENET') + SLASH + 'words.txt'
         folder_descriptions = {}
         folder_meaning = {}
         with open(filePath, 'r') as f:
@@ -106,7 +106,7 @@ class TinyImageNetDataset(Dataset):
         """
         Description of _load_train_data
         """
-        path = get_dataset_path('IMAGENET') + SLASH + 'train'
+        path = get_dataset_path('TINYIMAGENET') + SLASH + 'train'
         images = []
         labels = []
         for name in tqdm(os.listdir(path), desc='Loading Train Data'):
@@ -127,7 +127,7 @@ class TinyImageNetDataset(Dataset):
         """
         Description of _load_test_data
         """
-        path = get_dataset_path('IMAGENET') + SLASH + 'test' + SLASH + 'images' + SLASH
+        path = get_dataset_path('TINYIMAGENET') + SLASH + 'test' + SLASH + 'images' + SLASH
         images = []
         for img in tqdm(os.listdir(path), desc='Loading Test Data'):
             imgPath = os.path.join(path, img)
@@ -144,7 +144,7 @@ class TinyImageNetDataset(Dataset):
         Description of _load_val_data
         :return:
         """
-        path = get_dataset_path('IMAGENET') + SLASH + 'val' + SLASH
+        path = get_dataset_path('TINYIMAGENET') + SLASH + 'val' + SLASH
         images = []
         labels = []
         with open(path + 'val_annotations.txt', 'r') as f:

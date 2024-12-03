@@ -1,5 +1,5 @@
 from torchvision import transforms
-from DataHandlers import TinyImageNetDataset
+from DataHandlers.ImageClassification.TinyImageNet import TinyImageNetDataset
 
 
 if __name__ == '__main__':
