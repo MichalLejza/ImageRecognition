@@ -1,4 +1,4 @@
-from DataHandlers.ImageClassification.Mnist import MnistDataset
+from DataHandlers.Mnist import MnistDataset
 
 
 if __name__ == '__main__':
