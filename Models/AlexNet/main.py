@@ -4,7 +4,7 @@ import torch.optim as optim
 from torchvision import transforms
 from tqdm import tqdm
 from DataHandlers.Cifar10 import Cifar10Dataset
-from Models.Model1 import AlexNet
+from Models.AlexNet.Model1 import AlexNet
 
 
 class AlexNetTrainer:

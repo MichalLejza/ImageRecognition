@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 from DataHandlers.Mnist import MnistDataset
-from Models.Model1 import LeNet
+from Models.LeNet.Model1 import LeNet
 
 
 class CNN(nn.Module):
