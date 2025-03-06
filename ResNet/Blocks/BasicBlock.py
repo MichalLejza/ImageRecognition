@@ -6,7 +6,7 @@ class BasicBlock(nn.Module):
     """
     Basic block for ResNet used in models: ResNet18, ResNet34.
     """
-    def __init__(self, in_channels, out_channels, stride=1, downsample=None):
+    def __init__(self, in_channels: int, out_channels: int, stride: int=1, downsample=None):
         super(BasicBlock, self).__init__()
         # First Convolution Layer. In ResNet18 and ResNet34 it is 3x3 with padding 1. Other
         # paramaters differ based on which vlock you are building.
@@ -24,11 +24,9 @@ class BasicBlock(nn.Module):
 
     def forward(self, x):
         # Input Identity, basically we copy the input
-        input_identity = x
         # We apply downsample. If this block is first in a sequence, downsample is None, so we don't do anything
         # but if this block is not first, we have to apply downsample which is a 1x1 conv and batchnorm.
-        if self.downsample is not None:
-            input_identity = self.downsample(x)
+        input_identity = x if self.downsample is None else self.downsample(x)
 
         # First Convolution
         out = self.conv1(x)
