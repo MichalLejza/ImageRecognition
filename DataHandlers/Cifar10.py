@@ -123,6 +123,6 @@ class Cifar10Dataset(Dataset):
         :param idx: index of the image to be plotted
         :return: None
         """
-        plt.imshow(self.__images[idx] / 255.0)
+        plt.imshow(self.__images[idx].permute(1, 2, 0).numpy() / 255.0)
         plt.title(self.__classes[self.__labels[idx]])
         plt.show()

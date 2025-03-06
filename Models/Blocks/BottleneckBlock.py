@@ -3,10 +3,10 @@ import torch.nn.functional as F
 
 
 class BottleneckBlock(nn.Module):
-    expansion = 4  # Używane do zwiększenia liczby kanałów na wyjściu
-
     def __init__(self, in_channels, out_channels, stride=1, downsample=None):
         super(BottleneckBlock, self).__init__()
+        self.expansion = 4
+
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, bias=False)
         self.bn1 = nn.BatchNorm2d(out_channels)
 
