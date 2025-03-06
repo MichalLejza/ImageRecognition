@@ -104,3 +104,20 @@ class ResNet(nn.Module):
         print(self)
         print(f'Number of parameters: {sum(p.numel() for p in self.parameters())}')
         print(f'Number of trainable parameters: {sum(p.numel() for p in self.parameters() if p.requires_grad)}')
+
+
+class ResNet18(ResNet):
+    def __init__(self, num_classes=1000, basic=True, layers=None):
+        super(ResNet18, self).__init__(num_classes=num_classes, basic=basic, layers=layers)
+
+class ResNet34(ResNet):
+    def __init__(self, num_classes=1000, basic=True, layers=None):
+        super(ResNet34, self).__init__(num_classes=num_classes, basic=basic, layers=layers)
+
+class ResNet50(ResNet):
+    def __init__(self, num_classes=1000, bottleneck=True, layers=None):
+        super(ResNet50, self).__init__(num_classes=num_classes, bottleneck=bottleneck, layers=layers)
+
+class ResNet101(ResNet):
+    def __init__(self, num_classes=1000, bottleneck=True, layers=None):
+        super(ResNet101, self).__init__(num_classes=num_classes, bottleneck=bottleneck, layers=layers)

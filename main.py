@@ -3,6 +3,7 @@ import torch
 from DataHandlers.TinyImageNet import TinyImageNetDataset
 from ResNet.ResNet import ResNet
 from torchvision.transforms import transforms
+from ResNet.Builder import ModelBuilder
 
 
 if __name__ == '__main__':
@@ -13,3 +14,5 @@ if __name__ == '__main__':
     print(y.size())
     # resnet50 = ResNet(bottleneck=True, basic=False, layers=[3, 4, 6, 3], num_classes=1000)
     # resnet50.print_info()
+    model = ModelBuilder(resnet=resnet18)
+    model.resnet.print_info()
