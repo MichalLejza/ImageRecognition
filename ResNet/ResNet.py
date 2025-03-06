@@ -13,7 +13,7 @@ class ResNet(nn.Module):
         self.in_channels = 64
         self.expansion = 1 if basic else 4
 
-        # First conv Layer, identical to all ResNet ResNet
+        # First conv Layer, identical to all ResNet versions
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3, bias=False)
         self.batchnorm1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
