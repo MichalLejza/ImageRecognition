@@ -11,12 +11,13 @@ class ResNet(nn.Module):
         if bottleneck == basic or list is None or len(layers) != 4:
             raise Exception('Wrong Arguments Provided for ResNet Class')
 
+        # Variables
         self.in_channels = 64
         self.expansion = 1 if basic else 4
 
         # First conv Layer, identical to all ResNet versions
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3, bias=False)
-        self.batchnorm1 = nn.BatchNorm2d(64)
+        self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
@@ -33,7 +34,7 @@ class ResNet(nn.Module):
             self.layer4 = self.__make_layer_basic(512, layers[3], stride=2)
 
         # End layer
-        self.avgpool = nn.AvgPool2d((1, 1))
+        self.avgpool = nn.AvgPool2d((4, 4))
         self.fc = nn.Linear(512 * self.expansion, num_classes, bias=True)
 
     def __make_layer_basic(self, out_channels, num_blocks, stride=1):
@@ -74,20 +75,28 @@ class ResNet(nn.Module):
         #
         return nn.Sequential(*layers)
 
-    def foward(self, x):
+    def forward(self, x):
         #
+        print(x.shape)
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
+        print(x.shape)
         x = self.maxpool(x)
+        print(x.shape)
         #
         x = self.layer1(x)
+        print(x.shape)
         x = self.layer2(x)
+        print(x.shape)
         x = self.layer3(x)
+        print(x.shape)
         x = self.layer4(x)
+        print(x.shape)
         #
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
+        print(x.shape)
         x = self.fc(x)
         return x
 
