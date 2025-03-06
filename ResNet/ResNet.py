@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from Models.Blocks.BasicBlock import BasicBlock
-from Models.Blocks.BottleneckBlock import BottleneckBlock
+from ResNet.Blocks.BasicBlock import BasicBlock
+from ResNet.Blocks.BottleneckBlock import BottleneckBlock
 
 class ResNet(nn.Module):
     def __init__(self, bottleneck: bool=False, basic: bool=False, layers: list=None, num_classes: int=10):
@@ -13,7 +13,7 @@ class ResNet(nn.Module):
         self.in_channels = 64
         self.expansion = 1 if basic else 4
 
-        # First conv Layer, identical to all ResNet Models
+        # First conv Layer, identical to all ResNet ResNet
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3, bias=False)
         self.batchnorm1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
