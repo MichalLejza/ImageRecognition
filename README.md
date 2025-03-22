@@ -31,17 +31,17 @@ I made this repository mainly to archive ML models for image recognition, but i 
 ## Results
 
 ||TinyImageNet|CIFAR-10|CIFAR-100|EMNIST|
-|----|----|----|----|
-|LeNet |    |    |
-|AlexNet|    |    |
-|VGG16|    |    |
-|VGG19|    |    |
-|ResNet18|    |    |
-|ResNet34|    |    |
-|ResNet50|    |    |
-|ResNet101|    |    |
-|Xception|    |    |
-|EfficientNet|    |    |
-|EfficientNEtV2|    |    |
+|----|----|----|----|----|
+|LeNet |    |    |    |    |
+|AlexNet|    |    |    |    |
+|VGG16|    |    |    |    |
+|VGG19|    |    |    |    |
+|ResNet18|    |    |    |    |
+|ResNet34|    |    |    |    |
+|ResNet50|    |    |    |    |
+|ResNet101|    |    |    |    |
+|Xception|    |    |    |    |
+|EfficientNet|    |    |    |    |
+|EfficientNEtV2|    |    |    |    |
 
 
