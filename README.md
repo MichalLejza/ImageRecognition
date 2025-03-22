@@ -30,7 +30,7 @@ I made this repository mainly to archive ML models for image recognition, but i 
 
 ## Results
 
-# Accuracy
+### Accuracy
 
 ||TinyImageNet|CIFAR-10|CIFAR-100|EMNIST|
 |----|----|----|----|----|
