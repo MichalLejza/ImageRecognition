@@ -30,7 +30,7 @@ I made this repository mainly to archive ML models for image recognition, but i 
 
 ## Results
 
-|col1|col2|col3|
+||col2|col3|
 |----|----|----|
 |row |    |    |
 |row2|    |    |
