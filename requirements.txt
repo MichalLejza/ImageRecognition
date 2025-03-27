@@ -4,4 +4,4 @@ torchvision~=0.20.1+cu124
 matplotlib~=3.9.2
 numpy~=1.26.3
 tqdm~=4.67.1
-pillow~=10.2.0
+pillow~=10.3.0
