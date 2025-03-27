@@ -6,6 +6,11 @@ I made this repository mainly to archive ML models for image recognition, but i 
 # Models
 
 ## LeNet
+Original paper: http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf
+
+Convolutional neural network (CNN) developed by Yann LeCun in the 1990s, designed for handwritten digit recognition. It consists of two convolutional layers for feature extraction, each followed by average pooling for downsampling, and two fully connected layers for classification.
+
+Architecture: Input (32x32) → Conv1 (6x5x5) → Pool1 → Conv2 (16x5x5) → Pool2 → FC1 (120) → FC2 (84)
 
 ## AlexNet
 
