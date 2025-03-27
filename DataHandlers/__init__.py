@@ -35,5 +35,5 @@ __all__ = [
     "DATA_PATH",
     "AVAILABLE_DATASETS",
     "get_dataset_path",
-    "SLASH"
+    "SLASH",
 ]

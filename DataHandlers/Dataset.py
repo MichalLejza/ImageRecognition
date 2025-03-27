@@ -6,6 +6,8 @@ class CustomDataset(Dataset, ABC):
     def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
         if train == test:  # We cant have both train and test data. We must choose
             raise ValueError('Error while choosing dataset type: train and test values are the same')
+        self._train = train
+        self._test = test
         self._transform = transform  # only trnasform on images, used in __getitem__
         self._path: str = ""  # path to dataset given dataset
         self._images = None  # list of images, either a tensor or a list of paths to images
@@ -34,20 +36,23 @@ class CustomDataset(Dataset, ABC):
         return len(self._classes)
 
     def get_data_loader(self, batch_size: int = 64, shuffle: bool = False):
-        dataset = TensorDataset(self._images, self._labels)
+        # function to return dataloader for model
+        dataset = TensorDataset(self._images, self._labels)  # TODO: check if it is necessary
         loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
         return loader
 
+    def make_classes_index(self) -> None:
+        index = 0
+        for i in self._classes:
+            self._classes_index[i] = index
+            index += 1
+
+    def make_index_classes(self) -> None:
+        for i in self._classes:
+            self._index_classes[self._classes_index[i]] = i
+
     @abstractmethod
     def make_classes(self) -> None:
-        pass
-
-    @abstractmethod
-    def make_classes_index(self) -> None:
-        pass
-
-    @abstractmethod
-    def make_index_classes(self) -> None:
         pass
 
     @abstractmethod
