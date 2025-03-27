@@ -5,21 +5,21 @@ I made this repository mainly to archive ML models for image recognition, but i 
 
 # Models
 
-***- LeNet***
+## LeNet
 
-***- AlexNet***
+## AlexNet
 
-***- VGG16/19***
+## VGG16/19
 
-***- GoogLeNet***
+## GoogLeNet
 
-***- ResNet (18, 34, 50, 101)***
+## ResNet (18, 34, 50, 101)
 
-***- Xception***
+## Xception
 
-***- EfficientNet(TODO)***
+## EfficientNet
 
-***- EfficientNetV2(TODO)***
+## EfficientNetV2
 
 # Datasets
 
