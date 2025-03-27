@@ -16,6 +16,8 @@ Architecture: Input (32x32) → Conv1 (6x5x5) → Pool1 → Conv2 (16x5x5) → P
 
 ## AlexNet
 
+![AlexNet Architecture](Additional/alexnet.png)
+
 ## VGG16/19
 
 ## GoogLeNet
