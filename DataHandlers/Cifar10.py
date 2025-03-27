@@ -2,7 +2,6 @@ import pickle
 
 import numpy as np
 import torch
-import torch.nn.functional as F
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 
@@ -12,15 +11,11 @@ from DataHandlers.Dataset import CustomDataset
 
 class Cifar10Dataset(CustomDataset):
     def __init__(self, train: bool = False, test: bool = False, transform=None) -> None:
-        # call to super class CustomDataset
         super().__init__(train, test, transform)
-        # initialising path to dataset
         self._path = get_dataset_path('CIFAR10') + SLASH
-        # initialising data structures to hold info about labels
         self.make_classes()
         self.make_classes_index()
         self.make_index_classes()
-        # getting data
         if train:
             self._load_train_data()
         if test:
@@ -29,22 +24,12 @@ class Cifar10Dataset(CustomDataset):
     def make_classes(self) -> None:
         self._classes = ['Airplane', 'Automobile', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog', 'Horse', 'Ship', 'Truck']
 
-    def make_classes_index(self) -> None:
-        index = 0
-        for i in self._classes:
-            self._classes_index[i] = index
-            index += 1
-
-    def make_index_classes(self) -> None:
-        for i in self._classes:
-            self._index_classes[self._classes_index[i]] = i
-
     def images_shape(self) -> tuple:
         return self._images.shape
 
     def _load_train_data(self) -> None:
         images, labels = [], []
-        for i in tqdm(range(1, 6), desc="Loading CIFAR-10 data"):
+        for i in tqdm(range(1, 6), desc="Loading CIFAR-10 Train Data"):
             file_path = self._path + f"data_batch_{i}"
             batch_data = Cifar10Dataset._load_pickle_file(file_path)
             images.append(batch_data['data'])
@@ -78,6 +63,7 @@ class Cifar10Dataset(CustomDataset):
             plt.subplot(2, 4, i + 1)
             plt.imshow(self._images[indexes[i]].permute(1, 2, 0).numpy() / 255.0)
             plt.title(self._classes[self._labels[indexes[i]]])
+            plt.axis('off')
         plt.tight_layout()
         plt.show()
 
@@ -85,4 +71,5 @@ class Cifar10Dataset(CustomDataset):
         image = self._images[idx]
         plt.imshow(image.permute(1, 2, 0).numpy() / 255.0)
         plt.title(self._classes[self._labels[idx]])
+        plt.axis('off')
         plt.show()
