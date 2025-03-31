@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from torch.utils.data import Dataset, TensorDataset, DataLoader
+
+from torch.utils.data import Dataset, DataLoader
 
 
 class CustomDataset(Dataset, ABC):
@@ -18,7 +19,7 @@ class CustomDataset(Dataset, ABC):
 
     def __len__(self) -> int:
         # function to return length of dataset (number of images)
-        return self._images.shape[0]
+        return self._labels.shape[0]
 
     def __getitem__(self, idx: int) -> tuple:
         # function to return image and label, initial function is for datasets where we hold images as tensor
@@ -36,9 +37,7 @@ class CustomDataset(Dataset, ABC):
         return len(self._classes)
 
     def get_data_loader(self, batch_size: int = 64, shuffle: bool = False):
-        # function to return dataloader for model
-        dataset = TensorDataset(self._images, self._labels)  # TODO: check if it is necessary
-        loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        loader = DataLoader(self, batch_size=batch_size, shuffle=shuffle)
         return loader
 
     def make_classes_index(self) -> None:

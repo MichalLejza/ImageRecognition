@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from ResNet.Blocks.BasicBlock import BasicBlock
-from ResNet.Blocks.BottleneckBlock import BottleneckBlock
+from Models.ResNet.Blocks.BasicBlock import BasicBlock
+from Models.ResNet.Blocks.BottleneckBlock import BottleneckBlock
 
 
 class ResNet(nn.Module):

@@ -1,16 +1,15 @@
 import os
 import pickle
+
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
-from torch.utils.data import Dataset
-from tqdm import tqdm
 
 from DataHandlers import get_dataset_path, SLASH
 from DataHandlers.Dataset import CustomDataset
 
 
-class Cifar100DataSet(CustomDataset):
+class Cifar100Dataset(CustomDataset):
     def __init__(self, train=False, test=False, transform=None):
         super().__init__(train, test, transform)
         self._path = get_dataset_path('CIFAR100')
