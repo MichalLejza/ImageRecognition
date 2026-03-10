@@ -6,8 +6,8 @@ from PIL import Image
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 
-from DataHandlers import *
-from DataHandlers.Dataset import CustomDataset
+from src.DataHandlers import *
+from src.DataHandlers.Dataset import CustomDataset
 
 
 class Caltech256Dataset(CustomDataset):

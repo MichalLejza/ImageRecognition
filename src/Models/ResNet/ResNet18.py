@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-from Models.NeuralNetwork.abs_model import AbsModel
-from Models.ResNet.Blocks.BasicBlock import BasicBlock
-from Models.ResNet.Blocks.BottleneckBlock import BottleneckBlock
+from src.Models.NeuralNetwork.abs_model import AbsModel
+from src.Models.ResNet.Blocks.BasicBlock import BasicBlock
+from src.Models.ResNet.Blocks.BottleneckBlock import BottleneckBlock
 
 
 class ResNet18(AbsModel):

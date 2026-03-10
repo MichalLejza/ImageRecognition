@@ -5,8 +5,8 @@ import torch
 from matplotlib import pyplot as plt
 from tqdm import tqdm
 
-from DataHandlers import get_dataset_path, SLASH
-from DataHandlers.Dataset import CustomDataset
+from src.DataHandlers import get_dataset_path, SLASH
+from src.DataHandlers.Dataset import CustomDataset
 
 
 class Cifar10Dataset(CustomDataset):

@@ -5,8 +5,8 @@ import numpy as np
 import torch
 from matplotlib import pyplot as plt
 
-from DataHandlers import get_dataset_path, SLASH
-from DataHandlers.Dataset import CustomDataset
+from src.DataHandlers import get_dataset_path, SLASH
+from src.DataHandlers.Dataset import CustomDataset
 
 
 class Cifar100Dataset(CustomDataset):
